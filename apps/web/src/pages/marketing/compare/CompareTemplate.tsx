@@ -124,10 +124,10 @@ export function CompareTemplate(props: {
           </CardHeader>
           <CardContent className="flex flex-wrap gap-3">
             <Button asChild>
-              <Link to="/trial">Start free trial</Link>
+              <Link to="/get-started">Get started free</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link to="/pricing">Compare plans</Link>
+              <Link to="/app">Open app</Link>
             </Button>
           </CardContent>
         </Card>

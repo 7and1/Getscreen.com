@@ -12,3 +12,5 @@ export function PrivacyPage() {
     </div>
   );
 }
+
+export default PrivacyPage;

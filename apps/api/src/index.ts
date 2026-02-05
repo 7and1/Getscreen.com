@@ -129,8 +129,7 @@ app.notFound((c) => c.json({ error: { code: 'NOT_FOUND', message: 'Not found' } 
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		void ctx;
-		return app.fetch(request, env);
+		return app.fetch(request, env, ctx);
 	},
 } satisfies ExportedHandler<Env>;
 

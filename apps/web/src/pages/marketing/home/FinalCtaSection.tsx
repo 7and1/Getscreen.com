@@ -12,12 +12,12 @@ export function FinalCtaSection() {
               Ready to accelerate automation?
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Start with a free trial, connect a device, and create your first
+              Get started for free, connect a device, and create your first
               session in minutes.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/trial">Start free trial</Link>
+                <Link to="/get-started">Get started free</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link to="/app">Open app</Link>
@@ -29,7 +29,7 @@ export function FinalCtaSection() {
               <li>✓ Short-lived tokens and role-based sessions</li>
               <li>✓ Edge-first orchestration (Workers + Durable Objects)</li>
               <li>✓ AI suggestions with explicit approvals</li>
-              <li>✓ D1-based metadata and billing meters</li>
+              <li>✓ D1-based metadata and usage insights</li>
             </ul>
           </div>
         </div>

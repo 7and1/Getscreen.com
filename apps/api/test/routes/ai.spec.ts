@@ -7,6 +7,12 @@ describe('AI API', () => {
 	let sessionId: string;
 
 	beforeAll(async () => {
+		const migrate = await SELF.fetch('https://example.com/v1/dev/migrate', {
+			method: 'POST',
+			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },
+		});
+		expect(migrate.status).toBe(200);
+
 		const bootstrapResp = await SELF.fetch('https://example.com/v1/dev/bootstrap', {
 			method: 'POST',
 			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },

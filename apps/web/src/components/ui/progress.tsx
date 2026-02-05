@@ -19,7 +19,7 @@ const Progress = React.forwardRef<
       aria-valuenow={value}
       className={cn(
         "relative h-2 w-full overflow-hidden rounded-full bg-secondary",
-        className
+        className,
       )}
       {...props}
     >

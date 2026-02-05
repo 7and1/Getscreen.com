@@ -23,7 +23,7 @@
 			"binding": "DB",
 			"database_name": "getscreen_prod",
 			"database_id": "bc678eaa-c4d6-4408-b3b0-c56fc6dba658",
-			"migrations_dir": "db/migrations"
-		}
+			"migrations_dir": "db/migrations",
+		},
 	],
 }

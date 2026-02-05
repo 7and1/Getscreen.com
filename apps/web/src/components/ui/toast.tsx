@@ -21,7 +21,7 @@ const Toast = React.forwardRef<
       className={cn(
         "pointer-events-auto flex w-full max-w-md rounded-lg border p-4 shadow-lg transition-all",
         variantClasses[variant],
-        className
+        className,
       )}
       {...props}
     />

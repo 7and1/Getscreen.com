@@ -77,7 +77,7 @@ export const RATE_LIMITS = {
 	'ai:propose': { limit: 30, windowSeconds: 60 },
 
 	// Default
-	'default': { limit: 100, windowSeconds: 60 },
+	default: { limit: 100, windowSeconds: 60 },
 } as const;
 
 /**
@@ -146,13 +146,7 @@ export function isValidUserAgent(userAgent: string | null): boolean {
 	if (!userAgent) return false;
 	if (userAgent.length > 500) return false;
 	// Check for suspicious patterns
-	const suspiciousPatterns = [
-		/sqlmap/i,
-		/nikto/i,
-		/nmap/i,
-		/masscan/i,
-		/metasploit/i,
-	];
+	const suspiciousPatterns = [/sqlmap/i, /nikto/i, /nmap/i, /masscan/i, /metasploit/i];
 	return !suspiciousPatterns.some((pattern) => pattern.test(userAgent));
 }
 
@@ -161,16 +155,7 @@ export function isValidUserAgent(userAgent: string | null): boolean {
  */
 export function isLikelyBot(userAgent: string | null): boolean {
 	if (!userAgent) return true;
-	const botPatterns = [
-		/bot/i,
-		/crawler/i,
-		/spider/i,
-		/scraper/i,
-		/curl/i,
-		/wget/i,
-		/python/i,
-		/java/i,
-	];
+	const botPatterns = [/bot/i, /crawler/i, /spider/i, /scraper/i, /curl/i, /wget/i, /python/i, /java/i];
 	return botPatterns.some((pattern) => pattern.test(userAgent));
 }
 
@@ -217,19 +202,9 @@ export function timingSafeEqual(a: string, b: string): boolean {
 /**
  * Validate webhook signature
  */
-export async function validateWebhookSignature(
-	payload: string,
-	signature: string,
-	secret: string
-): Promise<boolean> {
+export async function validateWebhookSignature(payload: string, signature: string, secret: string): Promise<boolean> {
 	const encoder = new TextEncoder();
-	const key = await crypto.subtle.importKey(
-		'raw',
-		encoder.encode(secret),
-		{ name: 'HMAC', hash: 'SHA-256' },
-		false,
-		['sign']
-	);
+	const key = await crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
 
 	const signatureBytes = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
 	const expectedSignature = Array.from(new Uint8Array(signatureBytes))

@@ -147,17 +147,7 @@ export class Logger {
 	}
 
 	private isSensitiveField(key: string): boolean {
-		const sensitivePatterns = [
-			'password',
-			'secret',
-			'token',
-			'key',
-			'auth',
-			'credential',
-			'api_key',
-			'apikey',
-			'bearer',
-		];
+		const sensitivePatterns = ['password', 'secret', 'token', 'key', 'auth', 'credential', 'api_key', 'apikey', 'bearer'];
 		const lowerKey = key.toLowerCase();
 		return sensitivePatterns.some((pattern) => lowerKey.includes(pattern));
 	}

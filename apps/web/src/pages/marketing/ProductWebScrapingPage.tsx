@@ -91,8 +91,8 @@ export function ProductWebScrapingPage() {
         eyebrow="Product"
         title="Web scraping at scale"
         subtitle="Use browser-first extraction for the sites APIs can’t reach. Coordinate sessions across fleets with safe, human-approved AI actions."
-        ctaLabel="Start Free Trial"
-        ctaTo="/trial"
+        ctaLabel="Get started free"
+        ctaTo="/get-started"
         imageAlt="Web scraping dashboard preview"
       />
 
@@ -153,7 +153,7 @@ export function ProductWebScrapingPage() {
 
       <ProductCtaSection
         title="Start scraping today"
-        subtitle="Try the platform with a free trial—no credit card required."
+        subtitle="Get started for free—no credit card required."
       />
     </div>
   );

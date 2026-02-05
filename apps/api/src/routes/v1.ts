@@ -7,7 +7,7 @@ import { AppError } from '../lib/errors';
 import { id, nowMs } from '../lib/id';
 import { sha256Hex } from '../lib/crypto';
 import { signJwtHs256, decodeJwtPayloadUnsafe, verifyJwtHs256 } from '../lib/jwt';
-import { safeString, safeId, safeArray, safeRecord, paginationSchema } from '../lib/validation';
+import { safeString, safeId, safeArray, safeRecord, paginationSchema, safeEmail } from '../lib/validation';
 import { createLogger } from '../lib/logger';
 import { getRateLimit, getClientIp, hashIp } from '../lib/security';
 import { withTimeout, retryWithBackoff, isRetryableError } from '../lib/resilience';
@@ -115,8 +115,14 @@ const aiApproveSchema = z.object({
 			requires_confirmation: z.boolean().optional(),
 			confidence: z.number().min(0).max(1).optional(),
 		}),
-		100
+		100,
 	),
+});
+
+const authRegisterSchema = z.object({
+	email: safeEmail,
+	org_name: safeString(1, 120).optional(),
+	display_name: safeString(1, 120).optional(),
 });
 
 export function createV1App() {
@@ -191,11 +197,7 @@ export function createV1App() {
 
 	v1.get('/readyz', async (c) => {
 		try {
-			await withTimeout(
-				c.env.DB.prepare('SELECT 1 as ok').first(),
-				3000,
-				'Database health check timeout'
-			);
+			await withTimeout(c.env.DB.prepare('SELECT 1 as ok').first(), 3000, 'Database health check timeout');
 			return c.json({ ok: true, timestamp: new Date().toISOString() });
 		} catch (err) {
 			const requestId = c.get('requestId');
@@ -205,16 +207,81 @@ export function createV1App() {
 		}
 	});
 
+	// --- Register (free onboarding; returns an API key) ---
+	v1.post('/auth/register', async (c) => {
+		const rateLimit = getRateLimit('auth:register');
+		const clientIp = getClientIp(c.req.raw);
+		const ipHash = clientIp ? await hashIp(clientIp, c.env.SERVICE_NAME ?? '') : 'unknown';
+		await enforceRateLimit(c.env, 'public', `auth:register:${ipHash}`, rateLimit.limit, rateLimit.windowSeconds);
+
+		const body = authRegisterSchema.parse(await c.req.json().catch(() => ({})));
+		const now = nowMs();
+		const orgId = id('org');
+		const userId = id('usr');
+		const apiKeyId = id('key');
+
+		const apiKeyRaw = `vl_api_${crypto.randomUUID().replaceAll('-', '')}${crypto.randomUUID().replaceAll('-', '')}`;
+		const apiKeyHash = await sha256Hex(apiKeyRaw);
+
+		const orgName = body.org_name ?? 'My Workspace';
+		const displayName = body.display_name ?? body.email.split('@')[0].slice(0, 120);
+
+		await withTimeout(
+			c.env.DB.batch([
+				c.env.DB.prepare(`INSERT INTO orgs (id, name, plan, status, created_at, updated_at) VALUES (?, ?, 'free', 'active', ?, ?)`).bind(
+					orgId,
+					orgName,
+					now,
+					now,
+				),
+				c.env.DB.prepare(
+					`INSERT INTO users (id, org_id, email, email_verified, display_name, role, status, created_at, updated_at)
+					 VALUES (?, ?, ?, 0, ?, 'owner', 'active', ?, ?)`,
+				).bind(userId, orgId, body.email, displayName, now, now),
+				c.env.DB.prepare(
+					`INSERT INTO api_keys (id, org_id, name, key_hash, scopes_json, created_by_user_id, created_at)
+					 VALUES (?, ?, 'default', ?, ?, ?, ?)`,
+				).bind(apiKeyId, orgId, apiKeyHash, JSON.stringify(['*']), userId, now),
+			]),
+			10000,
+			'Registration timeout',
+		);
+
+		const logger = c.get('logger');
+		logger.logAudit('auth.registered', {
+			requestId: c.get('requestId'),
+			orgId,
+			userId,
+		});
+
+		return c.json(
+			{
+				org: { id: orgId, name: orgName },
+				user: { id: userId, email: body.email, display_name: displayName },
+				api_key: { id: apiKeyId, key: apiKeyRaw },
+			},
+			201,
+		);
+	});
+
 	// --- Auth (API key only for MVP) ---
 	v1.use('*', async (c, next) => {
+		const path = (() => {
+			const p = c.req.path;
+			if (p.startsWith('/api/v1/')) return p.slice('/api/v1'.length);
+			if (p.startsWith('/v1/')) return p.slice('/v1'.length);
+			return p;
+		})();
+
 		// Allow unauthenticated health and bootstrap
 		// SECURITY: Use exact path matching for WebSocket to prevent bypass
 		if (
-			c.req.path === '/healthz' ||
-			c.req.path === '/readyz' ||
-			c.req.path === '/dev/migrate' ||
-			c.req.path === '/dev/bootstrap' ||
-			c.req.path === '/ws'
+			path === '/healthz' ||
+			path === '/readyz' ||
+			path === '/auth/register' ||
+			path === '/dev/migrate' ||
+			path === '/dev/bootstrap' ||
+			path === '/ws'
 		)
 			return next();
 
@@ -229,7 +296,7 @@ export function createV1App() {
 				.bind(apiKeyHash)
 				.first<{ id: string; org_id: string; scopes_json: string; revoked_at: number | null }>(),
 			5000,
-			'Database query timeout'
+			'Database query timeout',
 		);
 
 		if (!row || row.revoked_at) {
@@ -252,7 +319,7 @@ export function createV1App() {
 				.run()
 				.catch(() => {
 					// Ignore errors for last_used_at update
-				})
+				}),
 		);
 
 		return next();
@@ -290,7 +357,7 @@ export function createV1App() {
 				),
 			]),
 			10000,
-			'Database operation timeout'
+			'Database operation timeout',
 		);
 
 		const logger = c.get('logger');
@@ -339,7 +406,8 @@ export function createV1App() {
 			bindings.push(`%${sanitizedSearch}%`, `%${sanitizedSearch}%`);
 		}
 		if (tag && tag.length > 0) {
-			for (const t of tag.slice(0, 10)) { // Limit to 10 tags
+			for (const t of tag.slice(0, 10)) {
+				// Limit to 10 tags
 				where.push('tags_json LIKE ?');
 				const sanitizedTag = t.replace(/[%_"]/g, '\\$&');
 				bindings.push(`%\"${sanitizedTag}\"%`);
@@ -371,7 +439,7 @@ export function createV1App() {
 					created_at: number;
 				}>(),
 			10000,
-			'Database query timeout'
+			'Database query timeout',
 		);
 
 		const rows = result.results ?? [];
@@ -490,13 +558,11 @@ export function createV1App() {
 			}
 
 			const existing = await withTimeout(
-				c.env.DB.prepare(
-					`SELECT response_status, response_json, request_hash FROM idempotency_keys WHERE org_id = ? AND key = ? LIMIT 1`,
-				)
+				c.env.DB.prepare(`SELECT response_status, response_json, request_hash FROM idempotency_keys WHERE org_id = ? AND key = ? LIMIT 1`)
 					.bind(auth.orgId, idempotencyKey)
 					.first<{ response_status: number; response_json: string; request_hash: string }>(),
 				5000,
-				'Idempotency check timeout'
+				'Idempotency check timeout',
 			);
 
 			if (existing) {
@@ -519,7 +585,7 @@ export function createV1App() {
 				.bind(body.device_id, auth.orgId)
 				.first<{ id: string; status: string }>(),
 			5000,
-			'Device lookup timeout'
+			'Device lookup timeout',
 		);
 
 		if (!device) throw new AppError({ status: 404, code: 'DEVICE_NOT_FOUND', message: 'Device not found' });
@@ -536,7 +602,7 @@ export function createV1App() {
 				.bind(sessionId, auth.orgId, body.device_id, c.req.raw.cf?.colo ?? null, expiresAt, now, now)
 				.run(),
 			10000,
-			'Session creation timeout'
+			'Session creation timeout',
 		);
 
 		const sessionToken = await issueSessionJoinToken(c.env, {
@@ -568,7 +634,7 @@ export function createV1App() {
 					.run()
 					.catch(() => {
 						// Ignore errors for idempotency key storage
-					})
+					}),
 			);
 		}
 
@@ -616,7 +682,9 @@ export function createV1App() {
 		)
 			.bind(now, now, sessionId, auth.orgId)
 			.run();
-		if (!res.success) throw new AppError({ status: 404, code: 'SESSION_NOT_FOUND', message: 'Session not found' });
+		if (!res.success || (res.meta?.changes ?? 0) === 0) {
+			throw new AppError({ status: 404, code: 'SESSION_NOT_FOUND', message: 'Session not found' });
+		}
 
 		const stub = c.env.SESSION_DO.getByName(sessionId);
 		await stub.fetch('https://session/end', { method: 'POST', headers: { 'x-session-id': sessionId } });
@@ -644,8 +712,33 @@ export function createV1App() {
 		});
 	});
 
-	// --- Billing (MVP: daily aggregate read) ---
+	// --- Usage (MVP: daily aggregate read) ---
+	v1.get('/usage/daily', async (c) => {
+		const auth = c.get('auth');
+		if (!auth) throw new AppError({ status: 401, code: 'UNAUTHORIZED', message: 'Unauthorized' });
+
+		const day = c.req.query('day') ?? new Date().toISOString().slice(0, 10);
+		const row = await c.env.DB.prepare(
+			`SELECT devices_active, ai_steps, bandwidth_in_bytes, bandwidth_out_bytes
+				 FROM usage_daily WHERE org_id = ? AND day = ? LIMIT 1`,
+		)
+			.bind(auth.orgId, day)
+			.first<{ devices_active: number; ai_steps: number; bandwidth_in_bytes: number; bandwidth_out_bytes: number }>();
+
+		return c.json({
+			day,
+			devices_active: row?.devices_active ?? 0,
+			ai_steps: row?.ai_steps ?? 0,
+			bandwidth_in_bytes: row?.bandwidth_in_bytes ?? 0,
+			bandwidth_out_bytes: row?.bandwidth_out_bytes ?? 0,
+		});
+	});
+
+	// Backwards-compatible alias (deprecated).
 	v1.get('/billing/usage', async (c) => {
+		c.header('Deprecation', 'true');
+		c.header('Link', '</v1/usage/daily>; rel="successor-version"');
+
 		const auth = c.get('auth');
 		if (!auth) throw new AppError({ status: 401, code: 'UNAUTHORIZED', message: 'Unauthorized' });
 
@@ -933,7 +1026,7 @@ async function enforceRateLimit(env: Env, orgId: string, key: string, limit: num
 				body: JSON.stringify({ key, limit, windowSeconds }),
 			}),
 			3000,
-			'Rate limit check timeout'
+			'Rate limit check timeout',
 		);
 
 		if (!response.ok) return;

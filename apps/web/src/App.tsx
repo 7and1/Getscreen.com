@@ -18,76 +18,116 @@ import { AppLoginPage } from "@/pages/app/AppLoginPage";
 
 // Lazy load secondary pages
 const PricingPage = lazy(() =>
-  import("@/pages/marketing/PricingPage").then((m) => ({ default: m.PricingPage }))
+  import("@/pages/marketing/PricingPage").then((m) => ({
+    default: m.PricingPage,
+  })),
 );
-const TrialPage = lazy(() =>
-  import("@/pages/marketing/TrialPage").then((m) => ({ default: m.TrialPage }))
+const GetStartedPage = lazy(() =>
+  import("@/pages/marketing/GetStartedPage").then((m) => ({
+    default: m.GetStartedPage,
+  })),
 );
 const ProductRpaPage = lazy(() =>
-  import("@/pages/marketing/ProductRpaPage").then((m) => ({ default: m.ProductRpaPage }))
+  import("@/pages/marketing/ProductRpaPage").then((m) => ({
+    default: m.ProductRpaPage,
+  })),
 );
 const ProductWebScrapingPage = lazy(() =>
-  import("@/pages/marketing/ProductWebScrapingPage").then((m) => ({ default: m.ProductWebScrapingPage }))
+  import("@/pages/marketing/ProductWebScrapingPage").then((m) => ({
+    default: m.ProductWebScrapingPage,
+  })),
 );
 const ProductRemoteSupportPage = lazy(() =>
-  import("@/pages/marketing/ProductRemoteSupportPage").then((m) => ({ default: m.ProductRemoteSupportPage }))
+  import("@/pages/marketing/ProductRemoteSupportPage").then((m) => ({
+    default: m.ProductRemoteSupportPage,
+  })),
 );
 const UseCasesIndexPage = lazy(() =>
-  import("@/pages/marketing/UseCasesIndexPage").then((m) => ({ default: m.UseCasesIndexPage }))
+  import("@/pages/marketing/UseCasesIndexPage").then((m) => ({
+    default: m.UseCasesIndexPage,
+  })),
 );
 const UseCaseAmazonSellersPage = lazy(() =>
-  import("@/pages/marketing/use-cases/UseCaseAmazonSellersPage").then((m) => ({ default: m.UseCaseAmazonSellersPage }))
+  import("@/pages/marketing/use-cases/UseCaseAmazonSellersPage").then((m) => ({
+    default: m.UseCaseAmazonSellersPage,
+  })),
 );
 const UseCaseDataCollectionPage = lazy(() =>
-  import("@/pages/marketing/use-cases/UseCaseDataCollectionPage").then((m) => ({ default: m.UseCaseDataCollectionPage }))
+  import("@/pages/marketing/use-cases/UseCaseDataCollectionPage").then((m) => ({
+    default: m.UseCaseDataCollectionPage,
+  })),
 );
 const UseCaseEnterpriseItPage = lazy(() =>
-  import("@/pages/marketing/use-cases/UseCaseEnterpriseItPage").then((m) => ({ default: m.UseCaseEnterpriseItPage }))
+  import("@/pages/marketing/use-cases/UseCaseEnterpriseItPage").then((m) => ({
+    default: m.UseCaseEnterpriseItPage,
+  })),
 );
 const CompareAnyDeskPage = lazy(() =>
-  import("@/pages/marketing/compare/CompareAnyDeskPage").then((m) => ({ default: m.CompareAnyDeskPage }))
+  import("@/pages/marketing/compare/CompareAnyDeskPage").then((m) => ({
+    default: m.CompareAnyDeskPage,
+  })),
 );
 const CompareChromeRemoteDesktopPage = lazy(() =>
-  import("@/pages/marketing/compare/CompareChromeRemoteDesktopPage").then((m) => ({ default: m.CompareChromeRemoteDesktopPage }))
+  import("@/pages/marketing/compare/CompareChromeRemoteDesktopPage").then(
+    (m) => ({ default: m.CompareChromeRemoteDesktopPage }),
+  ),
 );
 const CompareOctoparsePage = lazy(() =>
-  import("@/pages/marketing/compare/CompareOctoparsePage").then((m) => ({ default: m.CompareOctoparsePage }))
+  import("@/pages/marketing/compare/CompareOctoparsePage").then((m) => ({
+    default: m.CompareOctoparsePage,
+  })),
 );
 const CompareParsehubPage = lazy(() =>
-  import("@/pages/marketing/compare/CompareParsehubPage").then((m) => ({ default: m.CompareParsehubPage }))
+  import("@/pages/marketing/compare/CompareParsehubPage").then((m) => ({
+    default: m.CompareParsehubPage,
+  })),
 );
 const CompareTeamViewerPage = lazy(() =>
-  import("@/pages/marketing/compare/CompareTeamViewerPage").then((m) => ({ default: m.CompareTeamViewerPage }))
+  import("@/pages/marketing/compare/CompareTeamViewerPage").then((m) => ({
+    default: m.CompareTeamViewerPage,
+  })),
 );
 const BlogIndexPage = lazy(() =>
-  import("@/pages/marketing/BlogIndexPage").then((m) => ({ default: m.BlogIndexPage }))
+  import("@/pages/marketing/BlogIndexPage").then((m) => ({
+    default: m.BlogIndexPage,
+  })),
 );
 const BlogCategoryPage = lazy(() =>
-  import("@/pages/marketing/blog/BlogCategoryPage").then((m) => ({ default: m.BlogCategoryPage }))
+  import("@/pages/marketing/blog/BlogCategoryPage").then((m) => ({
+    default: m.BlogCategoryPage,
+  })),
 );
 const ResourcesGuidesPage = lazy(() =>
-  import("@/pages/marketing/resources/ResourcesGuidesPage").then((m) => ({ default: m.ResourcesGuidesPage }))
+  import("@/pages/marketing/resources/ResourcesGuidesPage").then((m) => ({
+    default: m.ResourcesGuidesPage,
+  })),
 );
 const ResourcesDocumentationPage = lazy(() =>
-  import("@/pages/marketing/resources/ResourcesDocumentationPage").then((m) => ({ default: m.ResourcesDocumentationPage }))
+  import("@/pages/marketing/resources/ResourcesDocumentationPage").then(
+    (m) => ({ default: m.ResourcesDocumentationPage }),
+  ),
 );
 const ResourcesApiReferencePage = lazy(() =>
-  import("@/pages/marketing/resources/ResourcesApiReferencePage").then((m) => ({ default: m.ResourcesApiReferencePage }))
+  import("@/pages/marketing/resources/ResourcesApiReferencePage").then((m) => ({
+    default: m.ResourcesApiReferencePage,
+  })),
 );
 const ResourcesVideoTutorialsPage = lazy(() =>
-  import("@/pages/marketing/resources/ResourcesVideoTutorialsPage").then((m) => ({ default: m.ResourcesVideoTutorialsPage }))
+  import("@/pages/marketing/resources/ResourcesVideoTutorialsPage").then(
+    (m) => ({ default: m.ResourcesVideoTutorialsPage }),
+  ),
 );
 const PrivacyPage = lazy(() =>
-  import("@/pages/legal/PrivacyPage").then((m) => ({ default: m.PrivacyPage }))
+  import("@/pages/legal/PrivacyPage").then((m) => ({ default: m.PrivacyPage })),
 );
 const TermsPage = lazy(() =>
-  import("@/pages/legal/TermsPage").then((m) => ({ default: m.TermsPage }))
+  import("@/pages/legal/TermsPage").then((m) => ({ default: m.TermsPage })),
 );
 const DevicesPage = lazy(() =>
-  import("@/pages/app/DevicesPage").then((m) => ({ default: m.DevicesPage }))
+  import("@/pages/app/DevicesPage").then((m) => ({ default: m.DevicesPage })),
 );
 const SessionPage = lazy(() =>
-  import("@/pages/app/SessionPage").then((m) => ({ default: m.SessionPage }))
+  import("@/pages/app/SessionPage").then((m) => ({ default: m.SessionPage })),
 );
 
 const LoadingFallback = () => (
@@ -256,13 +296,14 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "trial",
+        path: "get-started",
         element: (
           <Suspense fallback={<LoadingFallback />}>
-            <TrialPage />
+            <GetStartedPage />
           </Suspense>
         ),
       },
+      { path: "trial", element: <Navigate to="/get-started" replace /> },
       {
         path: "privacy",
         element: (

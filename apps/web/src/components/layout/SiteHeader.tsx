@@ -10,7 +10,6 @@ const nav = [
   { to: "/product/web-scraping", label: "Web Scraping" },
   { to: "/use-cases", label: "Use cases" },
   { to: "/compare/teamviewer-alternative", label: "Compare" },
-  { to: "/pricing", label: "Pricing" },
   { to: "/blog", label: "Blog" },
 ];
 
@@ -67,11 +66,16 @@ export function SiteHeader() {
           >
             {theme === "dark" ? "Light" : "Dark"}
           </Button>
-          <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="hidden md:inline-flex"
+          >
             <Link to="/app">Open App</Link>
           </Button>
           <Button asChild size="sm">
-            <Link to="/trial">Start free trial</Link>
+            <Link to="/get-started">Get started free</Link>
           </Button>
         </div>
       </div>
@@ -96,6 +100,9 @@ export function SiteHeader() {
               </NavLink>
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-border/60 pt-4">
+              <Button asChild size="sm">
+                <Link to="/get-started">Get started free</Link>
+              </Button>
               <Button asChild variant="outline" size="sm">
                 <Link to="/app">Open App</Link>
               </Button>
@@ -115,3 +122,5 @@ export function SiteHeader() {
     </header>
   );
 }
+
+export default SiteHeader;

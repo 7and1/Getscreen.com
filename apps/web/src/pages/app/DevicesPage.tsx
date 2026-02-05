@@ -153,7 +153,10 @@ export function DevicesPage() {
             {loading && devices.length === 0 ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="rounded-md border border-border/60 p-3">
+                  <div
+                    key={i}
+                    className="rounded-md border border-border/60 p-3"
+                  >
                     <Skeleton className="h-5 w-32" />
                     <Skeleton className="mt-2 h-4 w-48" />
                   </div>
@@ -214,9 +217,13 @@ export function DevicesPage() {
                             setSessionCreating(null);
                           }
                         }}
-                        disabled={sessionCreating === d.id || d.status === "offline"}
+                        disabled={
+                          sessionCreating === d.id || d.status === "offline"
+                        }
                       >
-                        {sessionCreating === d.id ? "Starting..." : "Start session"}
+                        {sessionCreating === d.id
+                          ? "Starting..."
+                          : "Start session"}
                       </Button>
                     </div>
                   </div>
@@ -288,7 +295,10 @@ export function DevicesPage() {
               <div className="text-sm font-medium">
                 Simulate device enrollment (dev)
               </div>
-              <Label htmlFor="devName" className="text-xs text-muted-foreground">
+              <Label
+                htmlFor="devName"
+                className="text-xs text-muted-foreground"
+              >
                 Device name
               </Label>
               <Input
@@ -338,12 +348,16 @@ export function DevicesPage() {
         </Card>
       </div>
 
-      <Dialog open={!!confirmDelete} onOpenChange={(open) => !open && setConfirmDelete(null)}>
+      <Dialog
+        open={!!confirmDelete}
+        onOpenChange={(open) => !open && setConfirmDelete(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Delete device</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{confirmDelete?.name}"? This action cannot be undone.
+              Are you sure you want to delete "{confirmDelete?.name}"? This
+              action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

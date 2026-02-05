@@ -66,9 +66,7 @@ export function Seo(props: SeoProps) {
       {canonical ? <meta property="og:url" content={canonical} /> : null}
       <meta property="og:type" content={ogType} />
       {imageUrl ? <meta property="og:image" content={imageUrl} /> : null}
-      {imageUrl ? (
-        <meta property="og:image:alt" content={props.title} />
-      ) : null}
+      {imageUrl ? <meta property="og:image:alt" content={props.title} /> : null}
       <meta property="og:locale" content="en_US" />
 
       {/* Article-specific OpenGraph tags */}
@@ -121,3 +119,5 @@ export function Seo(props: SeoProps) {
     </Helmet>
   );
 }
+
+export default Seo;

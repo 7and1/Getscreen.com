@@ -32,7 +32,7 @@ export function ProductHeroSection(props: {
                 <Link to={props.ctaTo}>{props.ctaLabel}</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/pricing">View pricing</Link>
+                <Link to="/app">Open app</Link>
               </Button>
             </div>
           </div>

@@ -21,7 +21,7 @@ export function CompareChromeRemoteDesktopPage() {
         {
           feature: "Usage metering",
           visionlink: "Devices/AI steps/bandwidth meters",
-          competitor: "Not designed for billing meters",
+          competitor: "No built-in usage analytics",
         },
       ]}
     />

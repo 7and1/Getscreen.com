@@ -78,7 +78,7 @@ const blogPages = [
 const pages = [
   "/",
   "/pricing",
-  "/trial",
+  "/get-started",
   "/privacy",
   "/terms",
   "/use-cases",

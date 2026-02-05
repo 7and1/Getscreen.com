@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { Seo } from "@/components/Seo";
 import { Button } from "@/components/ui/button";
@@ -75,9 +75,21 @@ export function AppLoginPage() {
 
         <Alert>
           <AlertDescription className="text-xs">
-            Your API key is stored locally in your browser and never sent to third parties.
+            Your API key is stored locally in your browser and never sent to
+            third parties.
           </AlertDescription>
         </Alert>
+
+        <p className="text-xs text-muted-foreground">
+          Don’t have an API key?{" "}
+          <Link
+            to="/get-started"
+            className="text-foreground underline underline-offset-4"
+          >
+            Create one for free
+          </Link>
+          .
+        </p>
       </form>
     </div>
   );

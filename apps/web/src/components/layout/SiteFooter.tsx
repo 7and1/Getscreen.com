@@ -12,8 +12,8 @@ export function SiteFooter() {
         </div>
 
         <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-          <Link to="/pricing" className="hover:text-foreground">
-            Pricing
+          <Link to="/get-started" className="hover:text-foreground">
+            Get started
           </Link>
           <Link to="/privacy" className="hover:text-foreground">
             Privacy
@@ -26,3 +26,5 @@ export function SiteFooter() {
     </footer>
   );
 }
+
+export default SiteFooter;

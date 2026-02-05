@@ -72,12 +72,7 @@ export const safeId = z
 /**
  * Safe email schema
  */
-export const safeEmail = z
-	.string()
-	.email()
-	.max(255)
-	.toLowerCase()
-	.transform(sanitizeText);
+export const safeEmail = z.string().email().max(255).toLowerCase().transform(sanitizeText);
 
 /**
  * Safe URL schema
@@ -86,21 +81,23 @@ export const safeUrl = z
 	.string()
 	.url()
 	.max(2048)
-	.refine((url) => {
-		try {
-			const parsed = new URL(url);
-			// Only allow http/https
-			return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-		} catch {
-			return false;
-		}
-	}, { message: 'Invalid URL or unsupported protocol' });
+	.refine(
+		(url) => {
+			try {
+				const parsed = new URL(url);
+				// Only allow http/https
+				return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+			} catch {
+				return false;
+			}
+		},
+		{ message: 'Invalid URL or unsupported protocol' },
+	);
 
 /**
  * Safe array schema with length limits
  */
-export const safeArray = <T extends z.ZodTypeAny>(schema: T, maxLength = MAX_ARRAY_LENGTH) =>
-	z.array(schema).max(maxLength);
+export const safeArray = <T extends z.ZodTypeAny>(schema: T, maxLength = MAX_ARRAY_LENGTH) => z.array(schema).max(maxLength);
 
 /**
  * Safe record/object schema with key limits
@@ -151,12 +148,17 @@ export const paginationSchema = z.object({
 /**
  * Validate timestamp parameters
  */
-export const timestampSchema = z.object({
-	start: z.coerce.number().int().positive().optional(),
-	end: z.coerce.number().int().positive().optional(),
-}).refine((data) => {
-	if (data.start && data.end) {
-		return data.start <= data.end;
-	}
-	return true;
-}, { message: 'Start timestamp must be before end timestamp' });
+export const timestampSchema = z
+	.object({
+		start: z.coerce.number().int().positive().optional(),
+		end: z.coerce.number().int().positive().optional(),
+	})
+	.refine(
+		(data) => {
+			if (data.start && data.end) {
+				return data.start <= data.end;
+			}
+			return true;
+		},
+		{ message: 'Start timestamp must be before end timestamp' },
+	);

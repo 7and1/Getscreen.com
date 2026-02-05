@@ -20,9 +20,8 @@ export function HomePage() {
       url: "https://visionlink.ai",
       offers: {
         "@type": "Offer",
-        price: "29.00",
+        price: "0",
         priceCurrency: "USD",
-        priceValidUntil: "2026-12-31",
         availability: "https://schema.org/InStock",
       },
       aggregateRating: {
@@ -78,7 +77,7 @@ export function HomePage() {
     <div>
       <Seo
         title="VisionLink AI - AI-Powered Remote Desktop & Browser Automation Platform"
-        description="Enterprise remote desktop software with AI-powered automation for RPA, web scraping, and IT support. 10x faster than TeamViewer. Start free trial."
+        description="Enterprise remote desktop software with AI-powered automation for RPA, web scraping, and IT support. 10x faster than TeamViewer. Get started free."
         keywords="remote desktop software, RPA automation tools, web scraping software, browser automation tool, TeamViewer alternative"
         pathname="/"
         imagePath={DEFAULT_OG_IMAGE_PATH}
@@ -94,3 +93,5 @@ export function HomePage() {
     </div>
   );
 }
+
+export default HomePage;

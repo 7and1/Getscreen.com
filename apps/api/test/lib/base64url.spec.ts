@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-	encodeBase64Url,
-	decodeBase64UrlToBytes,
-	encodeJsonBase64Url,
-	decodeJsonBase64Url,
-} from '../../src/lib/base64url';
+import { encodeBase64Url, decodeBase64UrlToBytes, encodeJsonBase64Url, decodeJsonBase64Url } from '../../src/lib/base64url';
 
 describe('base64url', () => {
 	describe('encodeBase64Url', () => {

@@ -27,7 +27,7 @@ export class CircuitBreaker {
 
 	constructor(
 		private readonly name: string,
-		private readonly config: CircuitBreakerConfig
+		private readonly config: CircuitBreakerConfig,
 	) {}
 
 	async execute<T>(fn: () => Promise<T>): Promise<T> {
@@ -118,10 +118,7 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
 /**
  * Retry with exponential backoff
  */
-export async function retryWithBackoff<T>(
-	fn: () => Promise<T>,
-	config: Partial<RetryConfig> = {}
-): Promise<T> {
+export async function retryWithBackoff<T>(fn: () => Promise<T>, config: Partial<RetryConfig> = {}): Promise<T> {
 	const cfg = { ...DEFAULT_RETRY_CONFIG, ...config };
 	let lastError: unknown;
 	let delay = cfg.initialDelay;
@@ -157,11 +154,7 @@ export async function retryWithBackoff<T>(
 /**
  * Timeout wrapper
  */
-export async function withTimeout<T>(
-	promise: Promise<T>,
-	timeoutMs: number,
-	errorMessage = 'Operation timed out'
-): Promise<T> {
+export async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage = 'Operation timed out'): Promise<T> {
 	const timeoutPromise = new Promise<never>((_, reject) => {
 		setTimeout(() => {
 			reject(
@@ -170,7 +163,7 @@ export async function withTimeout<T>(
 					code: 'INTERNAL_ERROR',
 					message: errorMessage,
 					details: { timeout: timeoutMs },
-				})
+				}),
 			);
 		}, timeoutMs);
 	});
@@ -191,7 +184,7 @@ function sleep(ms: number): Promise<void> {
 export class BatchProcessor<T, R> {
 	constructor(
 		private readonly processFn: (item: T) => Promise<R>,
-		private readonly concurrency: number = 5
+		private readonly concurrency: number = 5,
 	) {}
 
 	async process(items: T[]): Promise<R[]> {
@@ -227,10 +220,7 @@ export class BatchProcessor<T, R> {
 /**
  * Debounce function calls
  */
-export function debounce<T extends (...args: unknown[]) => unknown>(
-	fn: T,
-	delayMs: number
-): (...args: Parameters<T>) => void {
+export function debounce<T extends (...args: unknown[]) => unknown>(fn: T, delayMs: number): (...args: Parameters<T>) => void {
 	let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 	return (...args: Parameters<T>) => {
@@ -242,10 +232,7 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
 /**
  * Throttle function calls
  */
-export function throttle<T extends (...args: unknown[]) => unknown>(
-	fn: T,
-	limitMs: number
-): (...args: Parameters<T>) => void {
+export function throttle<T extends (...args: unknown[]) => unknown>(fn: T, limitMs: number): (...args: Parameters<T>) => void {
 	let lastRun = 0;
 
 	return (...args: Parameters<T>) => {
@@ -269,12 +256,7 @@ export function isRetryableError(error: unknown): boolean {
 	// Retry on network errors
 	if (error instanceof Error) {
 		const message = error.message.toLowerCase();
-		return (
-			message.includes('network') ||
-			message.includes('timeout') ||
-			message.includes('econnrefused') ||
-			message.includes('enotfound')
-		);
+		return message.includes('network') || message.includes('timeout') || message.includes('econnrefused') || message.includes('enotfound');
 	}
 
 	return false;

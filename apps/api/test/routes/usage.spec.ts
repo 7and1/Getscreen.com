@@ -1,10 +1,16 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { SELF } from 'cloudflare:test';
 
-describe('billing API', () => {
+describe('usage API', () => {
 	let apiKey: string;
 
 	beforeAll(async () => {
+		const migrate = await SELF.fetch('https://example.com/v1/dev/migrate', {
+			method: 'POST',
+			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },
+		});
+		expect(migrate.status).toBe(200);
+
 		const response = await SELF.fetch('https://example.com/v1/dev/bootstrap', {
 			method: 'POST',
 			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },
@@ -13,9 +19,9 @@ describe('billing API', () => {
 		apiKey = body.api_key.key;
 	});
 
-	describe('GET /billing/usage', () => {
+	describe('GET /usage/daily', () => {
 		it('retrieves usage for today', async () => {
-			const response = await SELF.fetch('https://example.com/v1/billing/usage', {
+			const response = await SELF.fetch('https://example.com/v1/usage/daily', {
 				headers: { 'x-api-key': apiKey },
 			});
 			expect(response.status).toBe(200);
@@ -28,7 +34,7 @@ describe('billing API', () => {
 		});
 
 		it('retrieves usage for specific day', async () => {
-			const response = await SELF.fetch('https://example.com/v1/billing/usage?day=2024-01-01', {
+			const response = await SELF.fetch('https://example.com/v1/usage/daily?day=2024-01-01', {
 				headers: { 'x-api-key': apiKey },
 			});
 			expect(response.status).toBe(200);
@@ -37,7 +43,7 @@ describe('billing API', () => {
 		});
 
 		it('returns zero values for day without data', async () => {
-			const response = await SELF.fetch('https://example.com/v1/billing/usage?day=2020-01-01', {
+			const response = await SELF.fetch('https://example.com/v1/usage/daily?day=2020-01-01', {
 				headers: { 'x-api-key': apiKey },
 			});
 			expect(response.status).toBe(200);
@@ -49,7 +55,7 @@ describe('billing API', () => {
 		});
 
 		it('rejects without authentication', async () => {
-			const response = await SELF.fetch('https://example.com/v1/billing/usage');
+			const response = await SELF.fetch('https://example.com/v1/usage/daily');
 			expect(response.status).toBe(401);
 		});
 	});

@@ -5,7 +5,9 @@ export interface ValidationErrors {
   [key: string]: string;
 }
 
-export function useFormValidation<T extends z.ZodObject<z.ZodRawShape>>(schema: T) {
+export function useFormValidation<T extends z.ZodObject<z.ZodRawShape>>(
+  schema: T,
+) {
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   const validate = useCallback(
@@ -23,7 +25,7 @@ export function useFormValidation<T extends z.ZodObject<z.ZodRawShape>>(schema: 
       setErrors(newErrors);
       return false;
     },
-    [schema]
+    [schema],
   );
 
   const validateField = useCallback(
@@ -44,7 +46,7 @@ export function useFormValidation<T extends z.ZodObject<z.ZodRawShape>>(schema: 
         }));
       }
     },
-    [schema]
+    [schema],
   );
 
   const clearErrors = useCallback(() => {

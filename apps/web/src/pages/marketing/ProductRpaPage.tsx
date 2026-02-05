@@ -66,8 +66,8 @@ export function ProductRpaPage() {
         eyebrow="Product"
         title="RPA Automation Platform"
         subtitle="Scale from 10 to 10,000 bots with reliable session orchestration, approvals, and auditable automation steps."
-        ctaLabel="Start Free Trial"
-        ctaTo="/trial"
+        ctaLabel="Get started free"
+        ctaTo="/get-started"
         imageAlt="RPA dashboard preview"
       />
 
@@ -142,7 +142,7 @@ export function ProductRpaPage() {
 
       <ProductCtaSection
         title="Ready to scale RPA safely?"
-        subtitle="Start a free trial, connect a device, and create your first session."
+        subtitle="Get started for free, connect a device, and create your first session."
       />
     </div>
   );

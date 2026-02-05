@@ -45,11 +45,21 @@ function joinUrl(base: string, path: string): string {
 
 async function parseOrThrow<T>(response: Response): Promise<T> {
   const text = await response.text();
-  const json = text ? (JSON.parse(text) as unknown) : null;
+  let json: unknown = null;
+  let parsedJson = false;
+  if (text) {
+    try {
+      json = JSON.parse(text) as unknown;
+      parsedJson = true;
+    } catch {
+      json = null;
+      parsedJson = false;
+    }
+  }
 
   if (!response.ok) {
-    const parsed = apiErrorSchema.safeParse(json);
-    if (parsed.success) {
+    const parsed = parsedJson ? apiErrorSchema.safeParse(json) : null;
+    if (parsed?.success) {
       throw new ApiError({
         status: response.status,
         code: parsed.data.error.code,
@@ -62,7 +72,17 @@ async function parseOrThrow<T>(response: Response): Promise<T> {
       status: response.status,
       code: "HTTP_ERROR",
       message: "Request failed",
-      details: json ?? text,
+      details: parsedJson ? json : text,
+    });
+  }
+
+  if (!text) return null as T;
+  if (!parsedJson) {
+    throw new ApiError({
+      status: response.status,
+      code: "INVALID_JSON",
+      message: "Invalid JSON response",
+      details: text,
     });
   }
 
@@ -133,6 +153,18 @@ export type SessionJoinResponse = {
   ws_url: string;
 };
 
+export type RegisterRequest = {
+  email: string;
+  org_name?: string;
+  display_name?: string;
+};
+
+export type RegisterResponse = {
+  org: { id: string; name: string };
+  user: { id: string; email: string; display_name?: string };
+  api_key: { id: string; key: string };
+};
+
 export async function apiRequest<T>(opts: {
   path: string;
   method?: string;
@@ -158,6 +190,14 @@ export async function apiRequest<T>(opts: {
     body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
   });
   return parseOrThrow<T>(response);
+}
+
+export function register(body: RegisterRequest) {
+  return apiRequest<RegisterResponse>({
+    path: "/auth/register",
+    method: "POST",
+    body,
+  });
 }
 
 export function listDevices(

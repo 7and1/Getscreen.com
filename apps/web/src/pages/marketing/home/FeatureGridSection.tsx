@@ -40,7 +40,7 @@ export function FeatureGridSection() {
       <SectionHeading
         eyebrow="Everything you need"
         title="Enterprise-grade building blocks"
-        description="Start with MVP-ready session flows, then grow into AI-assisted automation, artifacts, and billing."
+        description="Start with MVP-ready session flows, then grow into AI-assisted automation, artifacts, and usage insights."
       />
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         {features.map((f) => (

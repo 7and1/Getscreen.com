@@ -282,7 +282,7 @@ CREATE TABLE IF NOT EXISTS webhooks (
 );
 CREATE INDEX IF NOT EXISTS idx_webhooks_org_id ON webhooks(org_id);
 
--- Daily usage aggregation for billing
+-- Daily usage aggregation for analytics
 CREATE TABLE IF NOT EXISTS usage_daily (
   org_id TEXT NOT NULL,
   day TEXT NOT NULL, -- YYYY-MM-DD (UTC)

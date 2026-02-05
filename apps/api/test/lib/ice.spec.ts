@@ -19,18 +19,13 @@ describe('ice', () => {
 		});
 
 		it('parses valid JSON array', () => {
-			const config = JSON.stringify([
-				{ urls: ['stun:stun.example.com:19302'] },
-			]);
+			const config = JSON.stringify([{ urls: ['stun:stun.example.com:19302'] }]);
 			const result = getIceServers({ ICE_SERVERS_JSON: config });
 			expect(result).toEqual([{ urls: ['stun:stun.example.com:19302'] }]);
 		});
 
 		it('parses multiple servers', () => {
-			const config = JSON.stringify([
-				{ urls: ['stun:stun1.example.com:19302'] },
-				{ urls: ['stun:stun2.example.com:19302'] },
-			]);
+			const config = JSON.stringify([{ urls: ['stun:stun1.example.com:19302'] }, { urls: ['stun:stun2.example.com:19302'] }]);
 			const result = getIceServers({ ICE_SERVERS_JSON: config });
 			expect(result).toHaveLength(2);
 		});

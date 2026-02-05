@@ -15,7 +15,7 @@ export function ProductCtaSection(props: { title: string; subtitle: string }) {
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/trial">Start free trial</Link>
+              <Link to="/get-started">Get started free</Link>
             </Button>
             <Button asChild size="lg" variant="outline">
               <Link to="/app">Open app</Link>

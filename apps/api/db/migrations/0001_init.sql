@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS webhooks (
 );
 CREATE INDEX IF NOT EXISTS idx_webhooks_org_id ON webhooks(org_id);
 
--- Daily usage aggregation for billing
+-- Daily usage aggregation for analytics
 CREATE TABLE IF NOT EXISTS usage_daily (
   org_id TEXT NOT NULL,
   day TEXT NOT NULL, -- YYYY-MM-DD (UTC)
@@ -291,4 +291,3 @@ CREATE TABLE IF NOT EXISTS idempotency_keys (
   FOREIGN KEY (org_id) REFERENCES orgs(id) ON DELETE CASCADE
 );
 CREATE INDEX IF NOT EXISTS idx_idempotency_org_created ON idempotency_keys(org_id, created_at);
-

@@ -65,8 +65,8 @@ export function ProductRemoteSupportPage() {
         eyebrow="Product"
         title="Remote support, built for reliability"
         subtitle="Join sessions quickly, grant or revoke control, and keep a clean audit trail—without bolting automation onto legacy remote desktop tools."
-        ctaLabel="Start Free Trial"
-        ctaTo="/trial"
+        ctaLabel="Get started free"
+        ctaTo="/get-started"
         imageAlt="Remote support session preview"
       />
 
@@ -108,7 +108,7 @@ export function ProductRemoteSupportPage() {
 
       <ProductCtaSection
         title="Support faster with fewer surprises"
-        subtitle="Try the platform with a free trial and connect your first device."
+        subtitle="Get started for free and connect your first device."
       />
     </div>
   );

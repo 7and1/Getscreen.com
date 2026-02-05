@@ -28,15 +28,14 @@ export function HeroSection() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/trial">Start free trial</Link>
+                <Link to="/get-started">Get started free</Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/pricing">View pricing</Link>
+                <Link to="/app">Open app</Link>
               </Button>
             </div>
             <p className="mt-3 text-sm text-muted-foreground">
-              Target: 99.9% control plane availability. No credit card required
-              for trial. Join 500+ companies using VisionLink AI for automation.
+              Target: 99.9% control plane availability. No credit card required.
             </p>
           </div>
 

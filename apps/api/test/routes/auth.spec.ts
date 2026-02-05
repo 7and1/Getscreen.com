@@ -5,6 +5,12 @@ describe('authentication', () => {
 	let apiKey: string;
 
 	beforeAll(async () => {
+		const migrate = await SELF.fetch('https://example.com/v1/dev/migrate', {
+			method: 'POST',
+			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },
+		});
+		expect(migrate.status).toBe(200);
+
 		const response = await SELF.fetch('https://example.com/v1/dev/bootstrap', {
 			method: 'POST',
 			headers: { 'x-dev-bootstrap-token': 'test-bootstrap' },
@@ -61,6 +67,26 @@ describe('authentication', () => {
 		it('allows readyz without auth', async () => {
 			const response = await SELF.fetch('https://example.com/v1/readyz');
 			expect(response.status).toBe(200);
+		});
+
+		it('allows auth/register without auth', async () => {
+			const response = await SELF.fetch('https://example.com/v1/auth/register', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ email: 'new-user@example.com' }),
+			});
+			expect(response.status).toBe(201);
+			const body = (await response.json()) as { api_key: { key: string } };
+			expect(body.api_key.key).toMatch(/^vl_api_/);
+		});
+
+		it('rejects auth/register with invalid email', async () => {
+			const response = await SELF.fetch('https://example.com/v1/auth/register', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ email: 'not-an-email' }),
+			});
+			expect(response.status).toBe(400);
 		});
 
 		it('allows dev/bootstrap with bootstrap token', async () => {

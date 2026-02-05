@@ -5,7 +5,7 @@ export function CompareTeamViewerPage() {
     <CompareTemplate
       pathname="/compare/teamviewer-alternative"
       competitorName="TeamViewer"
-      title="VisionLink AI vs TeamViewer - Feature Comparison & Pricing 2026"
+      title="VisionLink AI vs TeamViewer - Feature Comparison (Free Tool)"
       description="Compare VisionLink AI and TeamViewer for automation workloads, reliability, and API-first orchestration."
       rows={[
         {
