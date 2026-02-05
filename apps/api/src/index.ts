@@ -6,6 +6,7 @@ import { createV1App } from './routes/v1';
 import { applySecurityHeaders, getClientIp, isValidUserAgent } from './lib/security';
 import { createLogger } from './lib/logger';
 import { MAX_REQUEST_SIZE } from './lib/validation';
+import { id } from './lib/id';
 
 import { SessionDO } from './do/SessionDO';
 import { DeviceDO } from './do/DeviceDO';
