@@ -1,0 +1,41 @@
+# Getscreen API - Cloudflare Worker Configuration
+# Copy this file to wrangler.toml and fill in your values
+# DO NOT commit wrangler.toml - it contains sensitive account_id
+
+name = "getscreen-api"
+main = "src/index.ts"
+compatibility_date = "2026-02-03"
+compatibility_flags = ["nodejs_compat_v2"]
+
+# Account ID - use environment variable CLOUDFLARE_ACCOUNT_ID instead
+# account_id = "your-account-id-here"
+
+[observability]
+enabled = false
+
+[vars]
+SERVICE_NAME = "getscreen-api"
+ENVIRONMENT = "production"
+LOG_LEVEL = "info"
+
+[[durable_objects.bindings]]
+name = "SESSION_DO"
+class_name = "SessionDO"
+
+[[durable_objects.bindings]]
+name = "DEVICE_DO"
+class_name = "DeviceDO"
+
+[[durable_objects.bindings]]
+name = "RATE_LIMIT_DO"
+class_name = "RateLimitDO"
+
+[[migrations]]
+tag = "v1"
+new_classes = ["SessionDO", "DeviceDO", "RateLimitDO"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "getscreen_prod"
+database_id = "YOUR_D1_DATABASE_ID"
+migrations_dir = "db/migrations"

@@ -1,0 +1,18 @@
+{
+  "name": "getscreen.com",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w @getscreen/api\" \"npm run dev -w @getscreen/web\"",
+    "test": "npm run test -ws",
+    "test:api": "npm run test -w @getscreen/api",
+    "test:web": "npm run test -w @getscreen/web",
+    "format": "prettier -w ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.6.2"
+  }
+}

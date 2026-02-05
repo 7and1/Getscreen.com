@@ -1,0 +1,17 @@
+node_modules/
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Security - never commit
+CLAUDE.md
+.claude/
+wrangler.toml
+*.local
+

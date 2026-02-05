@@ -1,0 +1,20 @@
+# Local dev vars for `wrangler dev`
+# Copy to `.dev.vars` and fill in values.
+
+ENVIRONMENT=dev
+LOG_LEVEL=debug
+
+# Used to sign session join tokens (JWT HS256). In production set via `wrangler secret put`.
+SESSION_JWT_SECRET=change-me
+
+# Enables dev-only endpoints:
+# - POST /v1/dev/migrate
+# - POST /v1/dev/bootstrap
+DEV_BOOTSTRAP_TOKEN=change-me-too
+
+# Allowed browser origins (comma separated). Use explicit origins in production.
+CORS_ORIGINS=http://localhost:5173
+
+# Optional override
+# ICE_SERVERS_JSON=[{"urls":["stun:stun.l.google.com:19302"]}]
+

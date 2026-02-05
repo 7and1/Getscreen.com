@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /app/
+Disallow: /*.json$
+
+# Crawl-delay for polite crawlers
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: Bingbot
+Crawl-delay: 0
+
+Sitemap: https://visionlink.ai/sitemap.xml
